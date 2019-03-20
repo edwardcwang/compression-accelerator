@@ -46,10 +46,9 @@ class CompressionAcceleratorTester(c: CompressionAcceleratorModule) extends Peek
 }
 
 class CompressionAcceleratorSpec extends ChiselFlatSpec {
-  implicit val p: Parameters = (new DefaultExampleConfig).toInstance
-  val dut = LazyModule(new CompressionAccelerator(OpcodeSet.custom3))
+  val dutGen = () => LazyModule(new CompressionAccelerator(OpcodeSet.custom3)(AcceleratorParams())).module
   "CompressionAccelerator" should "accept commands" in {
-    Driver.execute(TesterArgs() :+ "CompressionAccelerator", () => dut.module) {
+    Driver.execute(TesterArgs() :+ "CompressionAccelerator", dutGen) {
       c => new CompressionAcceleratorTester(c)
     } should be (true)
   }
